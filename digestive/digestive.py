@@ -25,9 +25,9 @@ class Cli(object):
 class Digestive(object):
     def __init__(self, user, repository, emails):
         self._user = user
-        self._repoistory_name = repository
+        self._repository_name = repository
         self._gh = Github(login_or_token='tals', password='Digest1ve')
-        self._repository = self._gh.get_repo("{}/{}".format(self._user, self._repoistory_name))
+        self._repository = self._gh.get_repo("{}/{}".format(self._user, self._repository_name))
         self.users = list(self._repository.get_contributors())
         self._state = DigestiveState()
         self._emails = emails
@@ -52,6 +52,8 @@ class Digestive(object):
         issue_list = list(self.get_issues())
 
         digest = DigestData()
+        digest.user = self._user
+        digest.repo = self._repository_name
 
         for github_issue in issue_list:
             if github_issue.state == IssueStates.OPEN:
@@ -63,7 +65,7 @@ class Digestive(object):
 
             issue = Issue()
             issue.url = github_issue.html_url
-            issue.label = '{}/{}#{}'.format(self._user, self._repoistory_name, github_issue.number)
+            issue.label = '{}/{}#{}'.format(self._user, self._repository_name, github_issue.number)
             issue.title = github_issue.title
             issue.state = github_issue.state
             github_user = github_issue.user

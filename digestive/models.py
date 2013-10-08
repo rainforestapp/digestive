@@ -6,6 +6,8 @@ class DigestData(object):
         self.total_issues = 0
         self.total_opened = 0
         self.total_closed = 0
+        self.user = None
+        self.repo = None
         self.issues = {}
 
     @property
@@ -14,6 +16,14 @@ class DigestData(object):
         issues.sort(key=lambda x: x[0].name)
 
         return issues
+
+    @property
+    def closed_issues_url(self):
+      return "https://github.com/%s/%s/issues?state=closed" % (self.user, self.repo)
+
+    @property
+    def opened_issues_url(self):
+      return "https://github.com/%s/%s/issues?state=opened" % (self.user, self.repo)
 
 class Issue(object):
     def __init__(self):
