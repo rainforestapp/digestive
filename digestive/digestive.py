@@ -14,7 +14,7 @@ class Cli(object):
         try:
             opts = options.parse()
         except(options.ParseError, options.MissingArgumentError):
-            print "Usage: python program.py rainforestapp/GitSatisfaction me@example.org"
+            print "Usage: digestive rainforestapp/digestive me@example.org"
             exit(1)
 
         digestive = Digestive(opts.username, opts.repository)
