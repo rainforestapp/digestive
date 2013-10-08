@@ -109,3 +109,14 @@ body,
   font-size: 12px;
   text-transform: uppercase;
 }
+
+.opened-issue {
+  color: #FF0000;
+  font-weight: bold;
+}
+
+.closed-issue,
+.opened-and-closed-issue {
+  color: #278d3f;
+  font-weight: bold;
+}
