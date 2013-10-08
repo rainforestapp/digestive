@@ -1,6 +1,6 @@
 # Digestive
 
-A simple email digest of what your team did today on GitHub, sent from the command line.
+A simple email digest of what your team did today on GitHub, sent from the command line. Digestive started out as an Interview Hack Evening at [Rainforest](https://www.rainforestqa.com/).
 
 ## Development Setup
 
