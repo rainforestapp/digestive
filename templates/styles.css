@@ -67,12 +67,19 @@ body,
 }
 
 .user-image > img { 
-  width: 40px ; 
+  width: 40px;
+  padding: 10px;
+  padding-top: 0;
 }
 
 .user-name {
   font-size: 18px;
   width: 100%;
+  padding: 10px;
+}
+
+.user-image,
+.user-name {
 }
 
 .number-block {
@@ -97,6 +104,12 @@ body,
 .issue-title {
   color: #9E9E9E;
   font-size: 14px;
+}
+
+.section-title,
+.section-content {
+  padding: 10px;
+  border-top: 1px solid #f5f5f5;
 }
 
 
