@@ -1,4 +1,6 @@
+#!/usr/bin/env python
 from github import Github
+import requests
 import options
 from github import Github
 from datetime import datetime, timedelta
