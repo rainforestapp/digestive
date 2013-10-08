@@ -1,16 +1,9 @@
 from github import Github
 from datetime import datetime, timedelta
-import requests
+
 def main():
     puller = DataPuller('rainforestapp', 'GitSatisfaction')
     print puller.users
-
-def main3():
-    gh = Github()
-    repo = gh.get_repo('rainforestapp/GitSatisfaction')
-    for issue in repo.get_issues():
-        print issue.title, issue.state, issue.labels, issue.body
-
 
 class DataPuller(object):
     def __init__(self, user, repository):
