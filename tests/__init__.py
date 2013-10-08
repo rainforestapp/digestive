@@ -15,3 +15,11 @@ class MockMixin(object):
         """
         MockTransaction.__exit__()
         MockTransaction.__enter__()
+
+
+def make_mock(**kwargs):
+    m = mock('mock')
+    for k, v in kwargs.items():
+        setattr(m, k, v)
+
+    return m

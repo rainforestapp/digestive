@@ -51,6 +51,8 @@ class Digestive(object):
 
             digest.total_issues += 1
 
+        return digest
+
     def process(self):
         digest = self.get_issues()
         render_collection(digest)
