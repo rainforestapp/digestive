@@ -10,16 +10,17 @@ from os import path
 import dateutil.parser
 from template import render_collection
 
+class Cli(object):
+    @classmethod
+    def main(self):
+        try:
+            opts = options.parse()
+        except(options.ParseError, options.MissingArgumentError):
+            print "Usage: python program.py rainforestapp/GitSatisfaction me@example.org"
+            exit(1)
 
-def main():
-    try:
-        opts = options.parse()
-    except(options.ParseError, options.MissingArgumentError):
-        print "Usage: python program.py rainforestapp/GitSatisfaction me@example.org"
-        exit(1)
-
-    digestive = Digestive(opts.username, opts.repository)
-    digestive.process()
+        digestive = Digestive(opts.username, opts.repository)
+        digestive.process()
 
 
 class Digestive(object):
@@ -145,4 +146,4 @@ class IssueCollection(object):
 
 
 if __name__ == '__main__':
-    main()
+    Cli.main()

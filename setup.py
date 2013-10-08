@@ -18,7 +18,6 @@ setup(
     description='Templatable Github digest emails',
     classifiers=[
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -32,7 +31,7 @@ setup(
     install_requires=requires,
     packages=find_packages(),
     entry_points={
-        'console_scripts': [ 'digestive=main' ],
+        'console_scripts': [ 'digestive=digestive.main' ],
     },
 )
 
