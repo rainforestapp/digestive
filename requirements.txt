@@ -9,3 +9,4 @@ pygithub3==0.5
 requests==0.14.0
 wsgiref==0.1.2
 python-dateutil
+-e git://github.com/gfxmonk/mocktest.git#egg=mocktest
