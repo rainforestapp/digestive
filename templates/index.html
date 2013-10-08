@@ -1,4 +1,4 @@
- <html lang="en">
+<html lang="en">
   <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <title>Digestive.</title>
@@ -7,196 +7,119 @@
     <!-- Container table -->
     <table id="container" cellpadding="20" cellspacing="0" border="0" align="center" width="100%">
 
-    <!-- Body table (not indented because the indentation is annoying for an essentially meaningless table) -->
-    <tr>
-    <td align="center">
-    <table id="body" cellpadding="20" cellspacing="0" border="0" align="center" width="600">
-      
-      <!-- Header -->
+      <!-- Body table (not indented because the indentation is annoying for an essentially meaningless table) -->
       <tr>
-        <td align="center" id="header">
-          <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
-            <tr>
-              <td id="header-text">Hi Fred! Here's your daily digestive.</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
+        <td align="center">
+          <table id="body" cellpadding="20" cellspacing="0" border="0" align="center" width="600">
 
-      <!-- Meta info -->
-      <tr>
-        <td id="meta" class="block">
-          <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
+            <!-- Header -->
             <tr>
-
-              <!-- Closed commits -->
-              <td class="number-block">
-                <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
+              <td align="center" id="header">
+                <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
                   <tr>
-                      <td class="big-number">${collection.total_closed()}</td>
-                  </tr>
-                  <tr>
-                    <td class="subtitle">issues CLOSED</td>
+                    <td id="header-text">Hi! Here's your daily digestive.</td>
                   </tr>
                 </table>
               </td>
+            </tr>
 
-              <!-- Opened commits -->
-              <td class="number-block">
+            <!-- Meta info -->
+            <tr>
+              <td id="meta" class="block">
                 <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
                   <tr>
-                      <td class="big-number">${collection.total_opened()}</td>
-                  </tr>
-                  <tr>
-                    <td class="subtitle">issues Opened</td>
+
+                    <!-- Closed commits -->
+                    <td class="number-block">
+                      <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
+                        <tr>
+                          <td class="big-number">${collection.get_total_closed()}</td>
+                        </tr>
+                        <tr>
+                          <td class="subtitle">issues CLOSED</td>
+                        </tr>
+                      </table>
+                    </td>
+
+                    <!-- Opened commits -->
+                    <td class="number-block">
+                      <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
+                        <tr>
+                          <td class="big-number">${collection.get_total_opened()}</td>
+                        </tr>
+                        <tr>
+                          <td class="subtitle">issues Opened</td>
+                        </tr>
+                      </table>
+                    </td>
+
+                    <!-- Total commits -->
+                    <td class="number-block" id="total-commits">
+                      <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
+                        <tr>
+                          <td class="big-number">${collection.get_total_issues()}</td>
+                        </tr>
+                        <tr>
+                          <td class="subtitle">total issues</td>
+                        </tr>
+                      </table>
+                    </td>
+
+
                   </tr>
                 </table>
               </td>
+            </tr>
 
-              <!-- Total commits -->
-              <td class="number-block" id="total-commits">
-                <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
+            % for (user, issues) in collection.group_by_users():
+
+            <!-- Team member 1 -->
+            <tr>
+              <td align="center" class="team-member">
+                <table cellpadding="10" cellspacing="0" border="0" align="center" width="600">
+
+                  <!-- Team member: meta -->
                   <tr>
-                      <td class="big-number">${collection.total_issues()}</td>
+                    <td class="user-image" width="40">
+                      <img src="${user.get_gravatar()}">
+                    </td>
+                    <td class="user-name">${user.get_name()}</td>
                   </tr>
+
                   <tr>
-                    <td class="subtitle">total issues</td>
+                    <td class="section-title">Issues:</td>
+                    <td>
+                      <!-- Team member: issues -->
+                      <ul class="list">
+                        %for issue in issues:
+                        <li class="issue">
+                        <div class="issue-details">
+                          <span class="${issue.get_css_class()}">${issue.get_human_state()}</span> 
+                          <a href="#{issue.get_url()}">${issue.get_label()}</a>
+                        </div>
+                        <div class="issue-title">${issue.get_title()}</div>
+                        </li>
+                        % endfor
+
+                      </ul>
+                    </td>
                   </tr>
                 </table>
               </td>
-
-
             </tr>
+            % endfor
+
           </table>
         </td>
       </tr>
-
-      <!-- Team member 1 -->
       <tr>
-        <td align="center" class="team-member">
-          <table cellpadding="10" cellspacing="0" border="0" align="center" width="600">
-
-            <!-- Team member: meta -->
-            <tr>
-              <td class="user-image" width="40">
-                <img src="https://2.gravatar.com/avatar/5426390773b30a4dfee69d36f3ff9200?d=https%3A%2F%2Fidenticons.github.com%2F1a077a5cbd9f0ae7328d85157a78526d.png&s=140">
-              </td>
-              <td class="user-name">Simon</td>
-            </tr>
-
-            <tr>
-              <td class="section-title">Issues:</td>
-              <td>
-                <!-- Team member: issues -->
-                <ul class="list">
-                  <li class="issue">
-                    <div class="issue-details">
-                      <span class="opened-and-closed-issue">opened + closed</span> 
-                      <a href="#">rainforestapp/turker#415</a>
-                    </div>
-                    <div class="issue-title">Can't delete test even if not a dependency</div>
-                  </li>
-
-                  <li class="issue">
-                    <div class="issue-details">
-                      <span class="closed-issue">closed</span> 
-                      <a href="#">rainforestapp/turker#415</a>
-                    </div>
-                    <div class="issue-title">Can't delete test even if not a dependency</div>
-                  </li>
-
-                  <li class="issue">
-                    <div class="issue-details">
-                      <span class="opened-issue">opened</span> 
-                      <a href="#">rainforestapp/turker#415</a>
-                    </div>
-                    <div class="issue-title">Can't delete test even if not a dependency</div>
-                  </li>
-
-                  <li class="issue">
-                    <div class="issue-details">
-                      <span class="opened-issue">opened</span> 
-                      <a href="#">rainforestapp/turker#415</a>
-                    </div>
-                    <div class="issue-title">Can't delete test even if not a dependency</div>
-                  </li>
-
-                </ul>
-              </td>
-            </tr>
+        <td>
+          <table id="footer" cellpadding="5" cellspacing="0" border="0" align="center" width="600">
+            <tr><td>Sent by Digestive.</td></tr>
+            <tr><td>Made with love on a <a href="https://www.rainforestqa.com/">RainforestQA</a> hack evening.</td></tr>
           </table>
         </td>
       </tr>
-
-
-      <!-- Team member 2 -->
-      <tr>
-        <td align="center" class="team-member">
-          <table cellpadding="10" cellspacing="0" border="0" align="center" width="600">
-
-            <!-- Team member: meta -->
-            <tr>
-              <td class="user-image" width="40">
-                <img src="https://2.gravatar.com/avatar/5426390773b30a4dfee69d36f3ff9200?d=https%3A%2F%2Fidenticons.github.com%2F1a077a5cbd9f0ae7328d85157a78526d.png&s=140">
-              </td>
-              <td class="user-name">Simon</td>
-            </tr>
-
-            <tr>
-              <td class="section-title">Issues:</td>
-              <td>
-                <!-- Team member: issues -->
-                <ul class="list">
-                  <li class="issue">
-                    <div class="issue-details">
-                      <span class="opened-and-closed-issue">opened + closed</span> 
-                      <a href="#">rainforestapp/turker#415</a>
-                    </div>
-                    <div class="issue-title">Can't delete test even if not a dependency</div>
-                  </li>
-
-                  <li class="issue">
-                    <div class="issue-details">
-                      <span class="closed-issue">closed</span> 
-                      <a href="#">rainforestapp/turker#415</a>
-                    </div>
-                    <div class="issue-title">Can't delete test even if not a dependency</div>
-                  </li>
-
-                  <li class="issue">
-                    <div class="issue-details">
-                      <span class="opened-issue">opened</span> 
-                      <a href="#">rainforestapp/turker#415</a>
-                    </div>
-                    <div class="issue-title">Can't delete test even if not a dependency</div>
-                  </li>
-
-                  <li class="issue">
-                    <div class="issue-details">
-                      <span class="opened-issue">opened</span> 
-                      <a href="#">rainforestapp/turker#415</a>
-                    </div>
-                    <div class="issue-title">Can't delete test even if not a dependency</div>
-                  </li>
-
-                </ul>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-
-    </table>
-    </td>
-    </tr>
-    <tr>
-      <td>
-        <table id="footer" cellpadding="5" cellspacing="0" border="0" align="center" width="600">
-          <tr><td>Sent by Digestive.</td></tr>
-          <tr><td>Made with love on a <a href="https://www.rainforestqa.com/">RainforestQA</a> hack evening.</td></tr>
-        </table>
-      </td>
-    </tr>
     </table>
   </body>
 </html>

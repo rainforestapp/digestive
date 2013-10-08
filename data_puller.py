@@ -67,13 +67,48 @@ class DigestiveState(object):
         """
         json.dump(self._data, open(self.FILENAME, 'w'))
 
+class User(object):
+    def get_name(self):
+        return "Simon"
+
+    def get_gravatar(self):
+        return "https://2.gravatar.com/avatar/5426390773b30a4dfee69d36f3ff9200?d=https%3A%2F%2Fidenticons.github.com%2F1a077a5cbd9f0ae7328d85157a78526d.png&s=140"
+
+class Issue(object):
+    def get_state(self):
+        return "issued"
+
+    def get_human_state(self):
+        return "Issued"
+
+    def get_title(self):
+        return "Can't delete test even if not a dependency"
+
+    def get_url(self):
+        return ""
+
+    def get_label(self):
+        return "rainforestapp/turker#415"
+
+    def get_css_class(self):
+        return "opened-and-closed-issue"
+
+
 class IssueCollection(object):
-    def total_issues(self):
+    def get_total_issues(self):
         return 10742
-    def total_opened(self):
+    def get_total_opened(self):
         return 5
-    def total_closed(self):
+    def get_total_closed(self):
         return 8
+
+    def group_by_users(self):
+        u1 = User()
+        u1_issues = [Issue()]
+        return [
+            (u1, u1_issues), 
+            (u1, u1_issues), 
+        ]
 
 if __name__ == '__main__':
     main()
