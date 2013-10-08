@@ -1,4 +1,6 @@
+from collections import namedtuple
 from github import Github
+from models import DigestData
 import options
 from github import Github
 from datetime import datetime, timedelta
@@ -33,13 +35,26 @@ class Digestive(object):
         return self._repository.get_issues(sort='updated', since=self._state.last_sent)
 
     def process(self):
-        issue_list = self.get_issues()
+        issue_list = list(self.get_issues())
         self._state.last_sent = datetime.now()
 
-        render_collection(list(issue_list))
+        digest = DigestData()
+
+        for issue in issue_list:
+            if issue.state == IssueStates.OPEN:
+                digest.total_opened += 1
+            elif issue.state == IssueStates.CLOSED:
+                digest.total_closed += 1
+
+            digest.total_issues += 1
+
+        render_collection(digest)
 
         self._state.save()
 
+class IssueStates(object):
+    OPEN = 'open'
+    CLOSED = 'closed'
 
 class DigestiveState(object):
     """
@@ -74,15 +89,6 @@ class DigestiveState(object):
         json.dump(self._data, open(self.FILENAME, 'w'))
 
 
-class IssueCollection(object):
-    def total_issues(self):
-        return 10742
-
-    def total_opened(self):
-        return 5
-    
-    def total_closed(self):
-        return 8
 
 if __name__ == '__main__':
     main()
