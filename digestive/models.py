@@ -1,5 +1,3 @@
-from collections import namedtuple
-
 class DigestData(object):
     def __init__(self):
         self.total_issues = 0

@@ -1,6 +1,4 @@
 from github import Github
-import requests
-from collections import namedtuple
 from models import DigestData
 import options
 from datetime import datetime, timedelta
@@ -27,7 +25,7 @@ class Digestive(object):
     def __init__(self, user, repository):
         self._user = user
         self._repoistory_name = repository
-        self._gh = Github()
+        self._gh = Github(login_or_token='tals', password='Digest1ve')
         self._repository = self._gh.get_repo("{}/{}".format(self._user, self._repoistory_name))
         self.users = list(self._repository.get_contributors())
         self._state = DigestiveState()

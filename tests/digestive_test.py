@@ -2,6 +2,7 @@ import unittest
 from digestive.digestive import Digestive
 from mocktest import *
 from tests import MockMixin, make_mock
+from github import Github
 
 
 class TestDigestive(MockMixin, unittest.TestCase):
@@ -9,6 +10,10 @@ class TestDigestive(MockMixin, unittest.TestCase):
     @classmethod
     def make_issue(cls, state='open'):
         return make_mock(state=state)
+
+    @classmethod
+    def make_repo(cls):
+        return make_mock()
 
     def test_get_digest_open_issues(self):
         digestive = Digestive('rainforestapp', 'GitSatisfaction')
