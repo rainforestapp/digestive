@@ -67,7 +67,7 @@ class Digestive(object):
 
     def process(self):
         digest = self.get_digest()
-        open('1.html','w').write(render_collection(digest))
+        Mail(html=render_collection(digest), to_emails=self._emails, from_email="test@example.org", subject="Digestive")
         self._state.last_sent = datetime.now()
 
         self._state.save()
