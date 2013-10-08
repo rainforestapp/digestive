@@ -17,18 +17,19 @@ class Cli(object):
             print "Usage: digestive rainforestapp/digestive me@example.org"
             exit(1)
 
-        digestive = Digestive(opts.username, opts.repository)
+        digestive = Digestive(opts.username, opts.repository, opts.emails)
         digestive.process()
 
 
 class Digestive(object):
-    def __init__(self, user, repository):
+    def __init__(self, user, repository, emails):
         self._user = user
         self._repoistory_name = repository
         self._gh = Github(login_or_token='tals', password='Digest1ve')
         self._repository = self._gh.get_repo("{}/{}".format(self._user, self._repoistory_name))
         self.users = list(self._repository.get_contributors())
         self._state = DigestiveState()
+        self._emails = emails
 
     def get_issues(self):
         return self._repository.get_issues(sort='updated', since=self._state.last_sent)
@@ -53,7 +54,7 @@ class Digestive(object):
 
     def process(self):
         digest = self.get_issues()
-        render_collection(digest)
+        Mail(html=render_collection(digest), to_email=self._emails, from_email='test@example.org', subject="Digestive")
         self._state.last_sent = datetime.now()
 
         self._state.save()
