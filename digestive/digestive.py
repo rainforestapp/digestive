@@ -1,6 +1,4 @@
 from github import Github
-import requests
-from collections import namedtuple
 from models import DigestData
 import options
 from datetime import datetime, timedelta
@@ -16,21 +14,23 @@ class Cli(object):
         try:
             opts = options.parse()
         except(options.ParseError, options.MissingArgumentError):
-            print "Usage: python program.py rainforestapp/GitSatisfaction me@example.org"
+            print "Usage: digestive rainforestapp/digestive me@example.org"
             exit(1)
 
-        digestive = Digestive(opts.username, opts.repository)
+        print "Xxx"
+        digestive = Digestive(opts.username, opts.repository, opts.emails)
         digestive.process()
 
 
 class Digestive(object):
-    def __init__(self, user, repository):
+    def __init__(self, user, repository, emails):
         self._user = user
         self._repoistory_name = repository
-        self._gh = Github()
+        self._gh = Github(login_or_token='tals', password='Digest1ve')
         self._repository = self._gh.get_repo("{}/{}".format(self._user, self._repoistory_name))
         self.users = list(self._repository.get_contributors())
         self._state = DigestiveState()
+        self._emails = emails
 
     def get_issues(self):
         return self._repository.get_issues(sort='updated', since=self._state.last_sent)
@@ -55,7 +55,7 @@ class Digestive(object):
 
     def process(self):
         digest = self.get_issues()
-        render_collection(digest)
+        Mail(html=render_collection(digest), to_emails=self._emails, from_email='test@example.org', subject="Digestive")
         self._state.last_sent = datetime.now()
 
         self._state.save()
@@ -107,44 +107,6 @@ class User(object):
     def get_gravatar(self):
         return "https://2.gravatar.com/avatar/5426390773b30a4dfee69d36f3ff9200?d=https%3A%2F%2Fidenticons.github.com%2F1a077a5cbd9f0ae7328d85157a78526d.png&s=140"
 
-
-class Issue(object):
-    def get_state(self):
-        return "issued"
-
-    def get_human_state(self):
-        return "Issued"
-
-    def get_title(self):
-        return "Can't delete test even if not a dependency"
-
-    def get_url(self):
-        return ""
-
-    def get_label(self):
-        return "rainforestapp/turker#415"
-
-    def get_css_class(self):
-        return "opened-and-closed-issue"
-
-
-class IssueCollection(object):
-    def get_total_issues(self):
-        return 10742
-
-    def get_total_opened(self):
-        return 5
-
-    def get_total_closed(self):
-        return 8
-
-    def group_by_users(self):
-        u1 = User()
-        u1_issues = [Issue()]
-        return [
-            (u1, u1_issues),
-            (u1, u1_issues),
-        ]
 
 
 def main():
