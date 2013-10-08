@@ -1,6 +1,7 @@
 from github import Github
 from models import DigestData
 import options
+from mail import Mail
 from datetime import datetime, timedelta
 import json
 from os import path
@@ -110,3 +111,6 @@ class User(object):
 
 def main():
     Cli.main()
+
+if __name__ == '__main__':
+    main()
