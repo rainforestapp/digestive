@@ -1,17 +1,5 @@
 from github import Github
 from datetime import datetime, timedelta
-import requests
-import options
-
-def main():
-    try:
-        opts = options.parse()
-    except(options.ParseError, options.MissingArgumentError):
-        print "Usage: python program.py rainforestapp/GitSatisfaction me@example.org"
-        exit(1)
-
-    puller = DataPuller(opts.username, opts.repository)
-    print puller.users
 
 class DataPuller(object):
     def __init__(self, user, repository):
@@ -24,6 +12,3 @@ class DataPuller(object):
     def get_issues(self):
         yesterday = datetime.now() - timedelta(days=1)
         return self._repository.get_issues(sort='updated', since=yesterday)
-
-if __name__ == '__main__':
-    main()
