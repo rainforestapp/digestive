@@ -36,7 +36,13 @@ class Digestive(object):
         issues = list(self._repository.get_issues(sort='updated', since=self._state.last_sent, state='open'))
         issues.extend(self._repository.get_issues(sort='updated', since=self._state.last_sent, state='closed'))
 
-        return issues
+        def get_date(issue):
+          if issue.state == 'closed':
+            return issue.closed_at
+          else:
+            return issue.created_at
+
+        return sorted(issues, key=get_date)
 
 
     def get_digest(self):
@@ -72,7 +78,8 @@ class Digestive(object):
 
     def process(self):
         digest = self.get_digest()
-        Mail(html=render_collection(digest), to_emails=self._emails, from_email="test@example.org", subject="Digestive")
+        html = render_collection(digest)
+        Mail(html=html, to_emails=self._emails, from_email="test@example.org", subject="Digestive")
         self._state.last_sent = datetime.now()
 
         self._state.save()

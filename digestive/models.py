@@ -31,7 +31,7 @@ class Issue(object):
         if self.state == IssueStates.CLOSED:
             return 'closed-issue'
         else:
-            return 'opened-and-closed-issue'
+            return 'opened-issue'
 
 class User(object):
     def __init__(self):
