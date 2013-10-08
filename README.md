@@ -16,3 +16,10 @@ pip install -r requirements.txt
 pip install -r requirements.txt
 python digestive.py user/repo email@domain.com
 ```
+
+## TODO
+
+- Support for pull requests
+- Support for commits
+- Autheticate with the github API to have a low api limit
+- Support custom SMTP server
