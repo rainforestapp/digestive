@@ -1,5 +1,5 @@
 import unittest
-from digestive import Digestive
+from digestive.digestive import Digestive
 from mocktest import *
 from tests import MockMixin, make_mock
 
