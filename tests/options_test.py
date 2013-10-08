@@ -1,5 +1,5 @@
 import unittest
-import options
+from digestive import options
 
 class TestOptions(unittest.TestCase):
     def test_parse_options(self):
