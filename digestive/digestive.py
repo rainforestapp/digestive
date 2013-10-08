@@ -147,5 +147,5 @@ class IssueCollection(object):
         ]
 
 
-if __name__ == '__main__':
+def main():
     Cli.main()
