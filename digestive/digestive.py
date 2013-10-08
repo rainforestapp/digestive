@@ -18,7 +18,6 @@ class Cli(object):
             print "Usage: digestive rainforestapp/digestive me@example.org"
             exit(1)
 
-        print "Xxx"
         digestive = Digestive(opts.username, opts.repository, opts.emails)
         digestive.process()
 
