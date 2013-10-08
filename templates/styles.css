@@ -31,7 +31,6 @@ body,
 
 #body {
   background-color: #fff;
-  margin-bottom: 30px;
 }
 
 .block {
@@ -48,6 +47,13 @@ body,
 
 #total-commits {
   border-right: none;
+}
+
+#footer {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 14px;
+  color: #9E9E9E;
 }
 
 
