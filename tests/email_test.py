@@ -1,6 +1,6 @@
 import unittest
 
-from email_template import email
+from digestive.email_template import email
 
 class TestEmail(unittest.TestCase):
     def test_embed_html(self):
