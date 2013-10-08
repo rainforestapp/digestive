@@ -1,5 +1,5 @@
 from github import Github
-from models import DigestData, Issue, User
+from models import DigestData, Issue, User, IssueStates
 import options
 from mail import Mail
 from datetime import datetime, timedelta
@@ -33,7 +33,11 @@ class Digestive(object):
         self._emails = emails
 
     def get_issues(self):
-        return self._repository.get_issues(sort='updated', since=self._state.last_sent)
+        issues = list(self._repository.get_issues(sort='updated', since=self._state.last_sent, state='open'))
+        issues.extend(self._repository.get_issues(sort='updated', since=self._state.last_sent, state='closed'))
+
+        return issues
+
 
     def get_digest(self):
         """
@@ -52,9 +56,10 @@ class Digestive(object):
             digest.total_issues += 1
 
             issue = Issue()
-            issue.url = github_issue.url
-            issue.labels = github_issue.labels
+            issue.url = github_issue.html_url
+            issue.label = '{}/{}#{}'.format(self._user, self._repoistory_name, github_issue.number)
             issue.title = github_issue.title
+            issue.state = github_issue.state
             github_user = github_issue.user
 
             user = User()
@@ -72,10 +77,6 @@ class Digestive(object):
 
         self._state.save()
 
-
-class IssueStates(object):
-    OPEN = 'open'
-    CLOSED = 'closed'
 
 
 class DigestiveState(object):
