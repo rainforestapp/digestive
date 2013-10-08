@@ -1,5 +1,5 @@
 import unittest
-from data_puller import DataPuller
+from digestive import DataPuller
 from mocktest import *
 from tests import MockMixin
 
