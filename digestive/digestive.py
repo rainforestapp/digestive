@@ -93,7 +93,7 @@ class DigestiveState(object):
     """
     Fun state stuff that needs to be saved
     """
-    FILENAME = 'digestive.json'
+    FILENAME = 'digestive_state.json'
 
     def __init__(self):
         if path.exists(self.FILENAME):
