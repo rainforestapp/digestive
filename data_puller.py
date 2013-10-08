@@ -15,10 +15,7 @@ class DataPuller(object):
 
     def get_issues(self):
         yesterday = datetime.now() - timedelta(days=1)
-        return self._repoistory_name.get_issues(sort='updated', since=yesterday)
+        return self._repository.get_issues(sort='updated', since=yesterday)
 
-    def commits(self):
-        pass
-    
 if __name__ == '__main__':
     main()
