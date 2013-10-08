@@ -1,8 +1,11 @@
 from github import Github
 from datetime import datetime, timedelta
 import requests
+import options
+
 def main():
-    puller = DataPuller('rainforestapp', 'GitSatisfaction')
+    opts = options.parse()
+    puller = DataPuller(opts.username, opts.repository)
     print puller.users
 
 def main3():
