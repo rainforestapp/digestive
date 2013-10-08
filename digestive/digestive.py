@@ -1,5 +1,5 @@
 from github import Github
-from models import DigestData
+from models import DigestData, Issue, User
 import options
 from mail import Mail
 from datetime import datetime, timedelta
@@ -43,19 +43,31 @@ class Digestive(object):
 
         digest = DigestData()
 
-        for issue in issue_list:
-            if issue.state == IssueStates.OPEN:
+        for github_issue in issue_list:
+            if github_issue.state == IssueStates.OPEN:
                 digest.total_opened += 1
-            elif issue.state == IssueStates.CLOSED:
+            elif github_issue.state == IssueStates.CLOSED:
                 digest.total_closed += 1
 
             digest.total_issues += 1
 
+            issue = Issue()
+            issue.url = github_issue.url
+            issue.labels = github_issue.labels
+            issue.title = github_issue.title
+            github_user = github_issue.user
+
+            user = User()
+            user.name = github_user.name or github_user.login
+            user.gravatar = github_user.avatar_url
+
+            digest.issues.setdefault(user, []).append(issue)
+
         return digest
 
     def process(self):
-        digest = self.get_issues()
-        Mail(html=render_collection(digest), to_emails=self._emails, from_email='test@example.org', subject="Digestive")
+        digest = self.get_digest()
+        open('1.html','w').write(render_collection(digest))
         self._state.last_sent = datetime.now()
 
         self._state.save()
@@ -100,17 +112,12 @@ class DigestiveState(object):
         json.dump(self._data, open(self.FILENAME, 'w'))
 
 
-class User(object):
-    def get_name(self):
-        return "Simon"
-
-    def get_gravatar(self):
-        return "https://2.gravatar.com/avatar/5426390773b30a4dfee69d36f3ff9200?d=https%3A%2F%2Fidenticons.github.com%2F1a077a5cbd9f0ae7328d85157a78526d.png&s=140"
-
-
 
 def main():
     Cli.main()
 
 if __name__ == '__main__':
+    import os
+    if path.exists(DigestiveState.FILENAME):
+        os.unlink(DigestiveState.FILENAME)
     main()

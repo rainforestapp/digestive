@@ -1,30 +1,33 @@
+from collections import namedtuple
+
+
 class DigestData(object):
     def __init__(self):
         self.total_issues = 0
         self.total_opened = 0
         self.total_closed = 0
+        self.issues = {}
 
     @property
     def group_by_users(self):
-        return []
+        issues = self.issues.items()
+        issues.sort(cmp=lambda x: x[0].name)
 
+        return issues
 
 class Issue(object):
-    def get_state(self):
-        return "issued"
+    def __init__(self):
+        self.state = None
+        self.human_state = None
+        self.url = None
+        self.label = None
+        self.css_class = None
+        self.title = None
 
-    def get_human_state(self):
-        return "Issued"
 
-    def get_title(self):
-        return "Can't delete test even if not a dependency"
 
-    def get_url(self):
-        return ""
-
-    def get_label(self):
-        return "rainforestapp/turker#415"
-
-    def get_css_class(self):
-        return "opened-and-closed-issue"
+class User(object):
+    def __init__(self):
+        self.name = None
+        self.gravatar = None
 
