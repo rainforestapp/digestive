@@ -7,10 +7,11 @@ class DigestData(object):
         self.total_opened = 0
         self.total_closed = 0
         self.issues = {}
+        self.users = {}
 
     @property
     def group_by_users(self):
-        issues = self.issues.items()
+        issues = [(self.users[k], v) for k, v in self.issues.items()]
         issues.sort(key=lambda x: x[0].name)
 
         return issues

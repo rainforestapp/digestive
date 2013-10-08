@@ -68,11 +68,14 @@ class Digestive(object):
             issue.state = github_issue.state
             github_user = github_issue.user
 
-            user = User()
-            user.name = github_user.name or github_user.login
-            user.gravatar = github_user.avatar_url
+            display_name = github_user.name or github_user.login
+            if display_name not in digest.users:
+                user = User()
+                user.name = display_name
+                user.gravatar = github_user.avatar_url
+                digest.users[display_name] = user
 
-            digest.issues.setdefault(user, []).append(issue)
+            digest.issues.setdefault(display_name, []).append(issue)
 
         return digest
 
