@@ -11,23 +11,34 @@ class DigestData(object):
     @property
     def group_by_users(self):
         issues = self.issues.items()
-        issues.sort(cmp=lambda x: x[0].name)
+        issues.sort(key=lambda x: x[0].name)
 
         return issues
 
 class Issue(object):
     def __init__(self):
         self.state = None
-        self.human_state = None
         self.url = None
         self.label = None
-        self.css_class = None
         self.title = None
 
+    @property
+    def human_state(self):
+        return self.state.capitalize()
 
+    @property
+    def css_class(self):
+        if self.state == IssueStates.CLOSED:
+            return 'closed-issue'
+        else:
+            return 'opened-and-closed-issue'
 
 class User(object):
     def __init__(self):
         self.name = None
         self.gravatar = None
 
+
+class IssueStates(object):
+    OPEN = 'open'
+    CLOSED = 'closed'
