@@ -33,10 +33,14 @@
                     <td class="number-block">
                       <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
                         <tr>
-                          <td class="big-number">${collection.get_total_closed()}</td>
+                          <td class="big-number">
+                            <a href="#" class="nostyle">${collection.get_total_closed()}</a>
+                          </td>
                         </tr>
                         <tr>
-                          <td class="subtitle">issues CLOSED</td>
+                          <td class="subtitle">
+                            <a href="#" class="nostyle">issues CLOSED</a>
+                          </td>
                         </tr>
                       </table>
                     </td>
@@ -45,10 +49,14 @@
                     <td class="number-block">
                       <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
                         <tr>
-                          <td class="big-number">${collection.get_total_opened()}</td>
+                          <td class="big-number">
+                            <a href="#" class="nostyle">${collection.get_total_opened()}</a>
+                          </td>
                         </tr>
                         <tr>
-                          <td class="subtitle">issues Opened</td>
+                          <td class="subtitle">
+                            <a href="#" class="nostyle">issues Opened</a>
+                          </td>
                         </tr>
                       </table>
                     </td>
@@ -57,10 +65,14 @@
                     <td class="number-block" id="total-commits">
                       <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
                         <tr>
-                          <td class="big-number">${collection.get_total_issues()}</td>
+                          <td class="big-number">
+                            <a href="#" class="nostyle">${collection.get_total_issues()}</a>
+                          </td>
                         </tr>
                         <tr>
-                          <td class="subtitle">total issues</td>
+                          <td class="subtitle">
+                            <a href="#" class="nostyle">total issues</a>
+                          </td>
                         </tr>
                       </table>
                     </td>
@@ -95,7 +107,7 @@
                         <li class="issue">
                         <div class="issue-details">
                           <span class="${issue.get_css_class()}">${issue.get_human_state()}</span> 
-                          <a href="#{issue.get_url()}">${issue.get_label()}</a>
+                          <a href="${issue.get_url()}">${issue.get_label()}</a>
                         </div>
                         <div class="issue-title">${issue.get_title()}</div>
                         </li>
