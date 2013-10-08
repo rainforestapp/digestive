@@ -7,6 +7,6 @@ def render_collection(collection):
     return email(html, "digestive/templates/styles.css")
 
 if __name__ == '__main__':
-    from digestive import IssueCollection
-    collection = IssueCollection()
+    from models import DigestData
+    collection = DigestData()
     print render_collection(collection)
