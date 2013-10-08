@@ -7,7 +7,6 @@ class Mail(object):
         if mailer is None:
             mailer = Mailer(host='localhost', port=1025)
 
-        print to_emails
         for to_email in to_emails:
             message = Message(From=from_email,
                               To=to_email,
