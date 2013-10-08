@@ -7,6 +7,8 @@ import json
 from os import path
 
 import dateutil.parser
+from template import render_collection
+
 
 def main():
     try:
@@ -16,6 +18,7 @@ def main():
         exit(1)
 
     digestive = Digestive(opts.username, opts.repository)
+    digestive.process()
 
 class Digestive(object):
     def __init__(self, user, repository):
@@ -30,7 +33,12 @@ class Digestive(object):
         return self._repository.get_issues(sort='updated', since=self._state.last_sent)
 
     def process(self):
+        issue_list = self.get_issues()
         self._state.last_sent = datetime.now()
+
+        render_collection(list(issue_list))
+
+        self._state.save()
 
 
 class DigestiveState(object):
