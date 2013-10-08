@@ -1,6 +1,6 @@
 # Digestive
 
-Email templateable daily digests of Github activity from the command line.
+A simple email digest of what your team did today on GitHub, sent from the command line.
 
 ## Development Setup
 
