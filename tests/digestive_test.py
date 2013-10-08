@@ -17,7 +17,7 @@ class TestDigestive(MockMixin, unittest.TestCase):
         digest = digestive.get_digest()
 
         self.assertEqual(digest.total_opened, 1)
-        self.assertEqual(digest.total_closed, 1)
+        self.assertEqual(digest.total_closed, 0)
         self.assertEqual(digest.total_issues, 1)
 
 if __name__ == '__main__':
