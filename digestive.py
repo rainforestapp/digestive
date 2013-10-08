@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from github import Github
 import requests
 from collections import namedtuple
@@ -10,7 +9,6 @@ from os import path
 
 import dateutil.parser
 from template import render_collection
-
 
 def main():
     try:

@@ -32,7 +32,7 @@ setup(
     install_requires=requires,
     packages=find_packages(),
     entry_points={
-        'console_scripts': [ 'digestive=professor.scripts:profess' ],
+        'console_scripts': [ 'digestive=digestive:main' ],
     },
 )
 
