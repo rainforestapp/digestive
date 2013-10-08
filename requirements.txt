@@ -1,1 +1,6 @@
-pygithub3
+cssselect==0.8
+lxml==3.2.3
+premailer==1.13
+pygithub3==0.5
+requests==0.14.0
+wsgiref==0.1.2
