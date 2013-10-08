@@ -1,7 +1,7 @@
 import unittest
 
-from data_puller import IssueCollection
-from template import render_collection
+from digestive.digestive import IssueCollection
+from digestive.template import render_collection
 
 class TestTemplate(unittest.TestCase):
     def test_renders_a_collection(self):
