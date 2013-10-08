@@ -65,5 +65,16 @@ class DigestiveState(object):
         """
         json.dump(self._data, open(self.FILENAME, 'w'))
 
+
+class IssueCollection(object):
+    def total_issues(self):
+        return 10742
+
+    def total_opened(self):
+        return 5
+    
+    def total_closed(self):
+        return 8
+
 if __name__ == '__main__':
     main()
