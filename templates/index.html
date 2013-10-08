@@ -2,7 +2,6 @@
   <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <title>Digestive.</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
   </head>
   <body style="margin: 0; padding: 0;" class="body">
     <!-- Container table -->
@@ -34,7 +33,7 @@
               <td class="number-block">
                 <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
                   <tr>
-                    <td class="big-number">12</td>
+                    <td class="big-number">${collection.total_closed()}</td>
                   </tr>
                   <tr>
                     <td class="subtitle">- issues CLOSED</td>
@@ -46,7 +45,7 @@
               <td class="number-block">
                 <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
                   <tr>
-                    <td class="big-number">34</td>
+                    <td class="big-number">${collection.total_opened()}</td>
                   </tr>
                   <tr>
                     <td class="subtitle">+ issues Opened</td>
@@ -58,7 +57,7 @@
               <td class="number-block" id="total-commits">
                 <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
                   <tr>
-                    <td class="big-number">113</td>
+                      <td class="big-number">${collection.total_issues()}</td>
                   </tr>
                   <tr>
                     <td class="subtitle">total issues</td>

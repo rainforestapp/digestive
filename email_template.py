@@ -1,8 +1,7 @@
 import sys
 from premailer import Premailer
 
-def email(html_file, css_file):
-    html = open(html_file).read()
+def email(html, css_file):
     mailer = Premailer(html, external_styles=css_file)
     return mailer.transform()
 
