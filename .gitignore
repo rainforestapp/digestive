@@ -20,6 +20,7 @@ lib64
 include
 .Python
 tags
+man
 
 # Installer logs
 pip-log.txt
