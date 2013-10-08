@@ -1,12 +1,15 @@
 import unittest
+from digestive.models import DigestData
 
-from digestive.digestive import IssueCollection
 from digestive.template import render_collection
 
 class TestTemplate(unittest.TestCase):
     def test_renders_a_collection(self):
-        collection = IssueCollection()
-        html = render_collection(collection)
+        digest = DigestData()
+        digest.total_issues = 10742
+        digest.total_closed = 5
+
+        html = render_collection(digest)
         self.assertIn("10742", html)
         self.assertIn("5", html)
 
