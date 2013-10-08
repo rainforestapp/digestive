@@ -25,5 +25,13 @@ class DataPuller(object):
         yesterday = datetime.now() - timedelta(days=1)
         return self._repository.get_issues(sort='updated', since=yesterday)
 
+class IssueCollection(object):
+    def total_issues(self):
+        return 10742
+    def total_opened(self):
+        return 5
+    def total_closed(self):
+        return 8
+
 if __name__ == '__main__':
     main()
