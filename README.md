@@ -14,7 +14,7 @@ pip install -r requirements.txt
 
 ```bash
 pip install -r requirements.txt
-python digestive.py user/repo email@domain.com
+python digestive/digestive.py user/repo email@domain.com
 ```
 
 ## TODO
@@ -23,3 +23,9 @@ python digestive.py user/repo email@domain.com
 - Support for commits
 - Autheticate with the github API to have a low api limit
 - Support custom SMTP server
+
+## Mac
+- export CFLAGS=-Qunused-arguments
+- export CPPFLAGS=-Qunused-arguments
+- STATIC_DEPS=true pip install lxml
+- pip install -r requirements.txt
