@@ -23,6 +23,7 @@
               </td>
             </tr>
 
+            % for digest in digests:
             <!-- Meta info -->
             <tr>
               <td id="meta" class="block">
@@ -34,12 +35,12 @@
                       <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
                         <tr>
                           <td class="big-number">
-                            <a href="${issues.closed_issues_url}" class="nostyle">${issues.total_closed}</a>
+                            <a href="${digest.closed_url}" class="nostyle">${digest.total_closed}</a>
                           </td>
                         </tr>
                         <tr>
                           <td class="subtitle">
-                            <a href="${issues.closed_issues_url}" class="nostyle">issues CLOSED</a>
+                            <a href="${digest.closed_url}" class="nostyle">${digest.item_type} CLOSED</a>
                           </td>
                         </tr>
                       </table>
@@ -50,12 +51,12 @@
                       <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
                         <tr>
                           <td class="big-number">
-                            <a href="${issues.opened_issues_url}" class="nostyle">${issues.total_opened}</a>
+                            <a href="${digest.opened_url}" class="nostyle">${digest.total_opened}</a>
                           </td>
                         </tr>
                         <tr>
                           <td class="subtitle">
-                            <a href="${issues.opened_issues_url}" class="nostyle">issues Opened</a>
+                            <a href="${digest.opened_url}" class="nostyle">${digest.item_type} Opened</a>
                           </td>
                         </tr>
                       </table>
@@ -66,12 +67,12 @@
                       <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
                         <tr>
                           <td class="big-number">
-                            <a href="${issues.opened_issues_url}" class="nostyle">${issues.total_issues}</a>
+                            <a href="${digest.unfiltered_url}" class="nostyle">${digest.total_items}</a>
                           </td>
                         </tr>
                         <tr>
                           <td class="subtitle">
-                            <a href="${issues.opened_issues_url}" class="nostyle">total issues</a>
+                            <a href="${digest.unfiltered_url}" class="nostyle">total ${digest.item_type}</a>
                           </td>
                         </tr>
                       </table>
@@ -83,7 +84,7 @@
               </td>
             </tr>
 
-            % for (user, issuess) in issues.group_by_users:
+            % for (user, issues) in digest.group_by_users:
 
             <!-- Team member 1 -->
             <tr>
@@ -103,7 +104,7 @@
                     <td class="section-content">
                       <!-- Team member: issues -->
                       <ul class="list">
-                        %for issue in issuess:
+                        %for issue in issues:
                         <li class="issue">
                         <div class="issue-details">
                           <span class="${issue.css_class}">${issue.human_state}</span>
@@ -120,67 +121,7 @@
               </td>
             </tr>
             % endfor
-
-            <!-- Meta info -->
-            <tr>
-              <td id="meta" class="block">
-                <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
-                  <tr>
-
-                    <!-- Closed commits -->
-                    <td class="number-block">
-                      <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
-                        <tr>
-                          <td class="big-number">
-                            <a href="${pulls.closed_issues_url}" class="nostyle">${pulls.total_closed}</a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="subtitle">
-                            <a href="${pulls.closed_issues_url}" class="nostyle">pulls CLOSED</a>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-
-                    <!-- Opened commits -->
-                    <td class="number-block">
-                      <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
-                        <tr>
-                          <td class="big-number">
-                            <a href="${pulls.opened_issues_url}" class="nostyle">${pulls.total_opened}</a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="subtitle">
-                            <a href="${pulls.opened_issues_url}" class="nostyle">pulls Opened</a>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-
-                    <!-- Total commits -->
-                    <td class="number-block" id="total-commits">
-                      <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
-                        <tr>
-                          <td class="big-number">
-                            <a href="${pulls.opened_issues_url}" class="nostyle">${pulls.total_issues}</a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="subtitle">
-                            <a href="${pulls.opened_issues_url}" class="nostyle">total pulls</a>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-
-
-                  </tr>
-                </table>
-              </td>
-            </tr>
-
+            % endfor
           </table>
         </td>
       </tr>

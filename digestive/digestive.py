@@ -1,5 +1,5 @@
 from github import Github
-from models import DigestData, Issue, User, IssueStates
+from models import DigestData, Item, User, ItemStates
 import options
 from mail import Mail
 from mailer import Mailer
@@ -38,41 +38,30 @@ class Digestive(object):
         self._state = DigestiveState()
         self._emails = emails
 
-    def get_pulls(self):
-        pulls = list(self._repository.get_pulls(state=','.join(['open', 'closed'])))
-
-        return sorted(pulls, key=get_date)
-
-    def get_issues(self):
-        issues = list(self._repository.get_issues(sort='updated', since=self._state.last_sent, state=','.join(['open', 'closed'])))
-
-        return sorted(issues, key=get_date)
-
-
-    def get_issues_digest(self):
+    def create_digest(self, item_type, github_items):
         """
         builds a DigestData instance filled with the digest
         """
         issue_list = list(self.get_issues())
 
-        digest = DigestData()
+        digest = DigestData(item_type)
         digest.user = self._user
         digest.repo = self._repository_name
 
-        for github_issue in issue_list:
-            if github_issue.state == IssueStates.OPEN:
+        for github_item in github_items:
+            if github_item.state == ItemStates.OPEN:
                 digest.total_opened += 1
-            elif github_issue.state == IssueStates.CLOSED:
+            elif github_item.state == ItemStates.CLOSED:
                 digest.total_closed += 1
 
-            digest.total_issues += 1
+            digest.total_items += 1
 
-            issue = Issue()
-            issue.url = github_issue.html_url
-            issue.label = '{}/{}#{}'.format(self._user, self._repository_name, github_issue.number)
-            issue.title = github_issue.title
-            issue.state = github_issue.state
-            github_user = github_issue.user
+            item = Item()
+            item.url = github_item.html_url
+            item.label = '{}/{}#{}'.format(self._user, self._repository_name, github_item.number)
+            item.title = github_item.title
+            item.state = github_item.state
+            github_user = github_item.user
 
             display_name = github_user.name or github_user.login
             if display_name not in digest.users:
@@ -81,51 +70,28 @@ class Digestive(object):
                 user.gravatar = github_user.avatar_url
                 digest.users[display_name] = user
 
-            digest.issues.setdefault(display_name, []).append(issue)
+            digest.items.setdefault(display_name, []).append(item)
 
         return digest
 
-    def get_pulls_digest(self):
-        """
-        builds a DigestData instance filled with the digest
-        """
-        pull_list = list(self.get_pulls())
+    def get_pulls(self):
+        pulls = list(self._repository.get_pulls(state=ItemStates.OPEN))
 
-        digest = DigestData()
-        digest.user = self._user
-        digest.repo = self._repository_name
+        return sorted(pulls, key=get_date)
 
-        for github_pull in pull_list:
-            if github_pull.state == IssueStates.OPEN:
-                digest.total_opened += 1
-            elif github_pull.state == IssueStates.CLOSED:
-                digest.total_closed += 1
+    def get_issues(self):
+        issues = list(self._repository.get_issues(sort='updated', since=self._state.last_sent, state=ItemStates.OPEN))
+        issues.extend(self._repository.get_issues(sort='updated', since=self._state.last_sent, state=ItemStates.CLOSED))
 
-            digest.total_pulls += 1
-
-            pull = Issue()
-            pull.url = github_pull.html_url
-            pull.label = '{}/{}#{}'.format(self._user, self._repository_name, github_pull.number)
-            pull.title = github_pull.title
-            pull.state = github_pull.state
-            github_user = github_pull.user
-
-            display_name = github_user.name or github_user.login
-            if display_name not in digest.users:
-                user = User()
-                user.name = display_name
-                user.gravatar = github_user.avatar_url
-                digest.users[display_name] = user
-
-            digest.pulls.setdefault(display_name, []).append(pull)
-
-        return digest
+        return sorted(issues, key=get_date)
 
     def process(self):
-        issues_digest = self.get_issues_digest()
-        pulls_digest = self.get_pulls_digest()
+        digests = [
+            self.create_digest('issues', self.get_issues()), 
+            self.create_digest('pulls', self.get_pulls())
+        ]
 
-        html = render_collection(issues_digest, pulls_digest)
+        html = render_collection(digests)
 
         gmailer = Mailer(host='smtp.gmail.com', port=465, usr='username', pwd='password')
 
@@ -157,7 +123,7 @@ class DigestiveState(object):
         if last_sent:
             return dateutil.parser.parse(last_sent)
         else:
-            return datetime.now() - timedelta(days=1)
+            return datetime.now() - timedelta(days=365)
 
     @last_sent.setter
     def last_sent(self, value):

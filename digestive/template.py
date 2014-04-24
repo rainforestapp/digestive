@@ -1,10 +1,10 @@
 from mako.template import Template
 from email_template import email
 
-def render_collection(issues, pulls):
+def render_collection(digests):
     template = open('digestive/templates/index.html').read()
 
-    html = Template(template).render(issues=issues, pulls=pulls)
+    html = Template(template).render(digests=digests)
     return email(html, "digestive/templates/styles.css")
 
 if __name__ == '__main__':
