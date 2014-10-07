@@ -2,31 +2,36 @@ from collections import namedtuple
 
 
 class DigestData(object):
-    def __init__(self):
-        self.total_issues = 0
+    def __init__(self, item_type):
+        self.item_type = item_type
+        self.total_items = 0
         self.total_opened = 0
         self.total_closed = 0
         self.user = None
         self.repo = None
-        self.issues = {}
+        self.items = {}
         self.users = {}
 
     @property
     def group_by_users(self):
-        issues = [(self.users[k], v) for k, v in self.issues.items()]
-        issues.sort(key=lambda x: x[0].name)
+        items = [(self.users[k], v) for k, v in self.items.items()]
+        items.sort(key=lambda x: x[0].name)
 
-        return issues
-
-    @property
-    def closed_issues_url(self):
-      return "https://github.com/%s/%s/issues?state=closed" % (self.user, self.repo)
+        return items
 
     @property
-    def opened_issues_url(self):
-      return "https://github.com/%s/%s/issues?state=opened" % (self.user, self.repo)
+    def closed_url(self):
+      return self.unfiltered_url + "?state=closed"
 
-class Issue(object):
+    @property
+    def opened_url(self):
+      return self.unfiltered_url + "?state=open"
+
+    @property
+    def unfiltered_url(self):
+      return "https://github.com/%s/%s/%s" % (self.user, self.repo, self.item_type, )
+
+class Item(object):
     def __init__(self):
         self.state = None
         self.url = None
@@ -39,7 +44,7 @@ class Issue(object):
 
     @property
     def css_class(self):
-        if self.state == IssueStates.CLOSED:
+        if self.state == ItemStates.CLOSED:
             return 'closed-issue'
         else:
             return 'opened-issue'
@@ -50,6 +55,6 @@ class User(object):
         self.gravatar = None
 
 
-class IssueStates(object):
+class ItemStates(object):
     OPEN = 'open'
     CLOSED = 'closed'

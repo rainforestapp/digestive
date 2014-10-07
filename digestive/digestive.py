@@ -1,7 +1,8 @@
 from github import Github
-from models import DigestData, Issue, User, IssueStates
+from models import DigestData, Item, User, ItemStates
 import options
 from mail import Mail
+from mailer import Mailer
 from datetime import datetime, timedelta
 import json
 from os import path
@@ -21,6 +22,11 @@ class Cli(object):
         digestive = Digestive(opts.username, opts.repository, opts.emails)
         digestive.process()
 
+def get_date(closer_creater):
+  if closer_creater.state == 'closed':
+    return closer_creater.closed_at
+  else:
+    return closer_creater.created_at
 
 class Digestive(object):
     def __init__(self, user, repository, emails):
@@ -32,43 +38,30 @@ class Digestive(object):
         self._state = DigestiveState()
         self._emails = emails
 
-    def get_issues(self):
-        issues = list(self._repository.get_issues(sort='updated', since=self._state.last_sent, state='open'))
-        issues.extend(self._repository.get_issues(sort='updated', since=self._state.last_sent, state='closed'))
-
-        def get_date(issue):
-          if issue.state == 'closed':
-            return issue.closed_at
-          else:
-            return issue.created_at
-
-        return sorted(issues, key=get_date)
-
-
-    def get_digest(self):
+    def create_digest(self, item_type, github_items):
         """
         builds a DigestData instance filled with the digest
         """
         issue_list = list(self.get_issues())
 
-        digest = DigestData()
+        digest = DigestData(item_type)
         digest.user = self._user
         digest.repo = self._repository_name
 
-        for github_issue in issue_list:
-            if github_issue.state == IssueStates.OPEN:
+        for github_item in github_items:
+            if github_item.state == ItemStates.OPEN:
                 digest.total_opened += 1
-            elif github_issue.state == IssueStates.CLOSED:
+            elif github_item.state == ItemStates.CLOSED:
                 digest.total_closed += 1
 
-            digest.total_issues += 1
+            digest.total_items += 1
 
-            issue = Issue()
-            issue.url = github_issue.html_url
-            issue.label = '{}/{}#{}'.format(self._user, self._repository_name, github_issue.number)
-            issue.title = github_issue.title
-            issue.state = github_issue.state
-            github_user = github_issue.user
+            item = Item()
+            item.url = github_item.html_url
+            item.label = '{}/{}#{}'.format(self._user, self._repository_name, github_item.number)
+            item.title = github_item.title
+            item.state = github_item.state
+            github_user = github_item.user
 
             display_name = github_user.name or github_user.login
             if display_name not in digest.users:
@@ -77,14 +70,32 @@ class Digestive(object):
                 user.gravatar = github_user.avatar_url
                 digest.users[display_name] = user
 
-            digest.issues.setdefault(display_name, []).append(issue)
+            digest.items.setdefault(display_name, []).append(item)
 
         return digest
 
+    def get_pulls(self):
+        pulls = list(self._repository.get_pulls(state=ItemStates.OPEN))
+
+        return sorted(pulls, key=get_date)
+
+    def get_issues(self):
+        issues = list(self._repository.get_issues(sort='updated', since=self._state.last_sent, state=ItemStates.OPEN))
+        issues.extend(self._repository.get_issues(sort='updated', since=self._state.last_sent, state=ItemStates.CLOSED))
+
+        return sorted(issues, key=get_date)
+
     def process(self):
-        digest = self.get_digest()
-        html = render_collection(digest)
-        Mail(html=html, to_emails=self._emails, from_email="test@example.org", subject="Digestive")
+        digests = [
+            self.create_digest('issues', self.get_issues()), 
+            self.create_digest('pulls', self.get_pulls())
+        ]
+
+        html = render_collection(digests)
+
+        gmailer = Mailer(host='smtp.gmail.com', port=465, usr='username', pwd='password')
+
+        Mail(html=html, to_emails=self._emails, from_email="test@example.org", subject="Digestive", mailer = gmailer)
         self._state.last_sent = datetime.now()
 
         self._state.save()
@@ -112,7 +123,7 @@ class DigestiveState(object):
         if last_sent:
             return dateutil.parser.parse(last_sent)
         else:
-            return datetime.now() - timedelta(days=1)
+            return datetime.now() - timedelta(days=365)
 
     @last_sent.setter
     def last_sent(self, value):
